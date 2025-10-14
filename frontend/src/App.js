@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import './App.css';
+// src/App.js
 
 function App() {
   const [ingredients, setIngredients] = useState('');
