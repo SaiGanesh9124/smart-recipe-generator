@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import './App.css';
-import { recipes, mockImageRecognition } from './data/recipes';
+import { recipes as recipeData, mockImageRecognition } from './data/recipes';
 
 function App() {
   const [ingredients, setIngredients] = useState('');
@@ -8,7 +8,6 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const [favorites, setFavorites] = useState([]);
   const [filters, setFilters] = useState({
     dietary: '',
     difficulty: '',
@@ -19,7 +18,6 @@ function App() {
   const [currentView, setCurrentView] = useState('search');
   const [servings, setServings] = useState(4);
   const [showIngredientList, setShowIngredientList] = useState(false);
-  const [recommendations, setRecommendations] = useState([]);
   const fileInputRef = useRef(null);
 
   const commonIngredients = [
@@ -46,7 +44,7 @@ function App() {
     setTimeout(() => {
       const availableIngredients = ingredients.toLowerCase().split(',').map(i => i.trim());
       
-      let filteredRecipes = recipes.map(recipe => {
+      let filteredRecipes = recipeData.map(recipe => {
         let matchCount = 0;
         const missingIngredients = [];
         
@@ -122,7 +120,7 @@ function App() {
   };
 
   const viewRecipe = (recipeId) => {
-    const recipe = recipes.find(r => r.id === recipeId);
+    const recipe = recipeData.find(r => r.id === recipeId);
     if (recipe) {
       setSelectedRecipe(recipe);
       setServings(recipe.servings);
@@ -156,13 +154,12 @@ function App() {
   };
 
   const loadFavorites = () => {
-    const favoriteRecipes = recipes.filter(r => userFavorites.includes(r.id));
+    const favoriteRecipes = recipeData.filter(r => userFavorites.includes(r.id));
     setRecipes(favoriteRecipes);
   };
 
   const loadRecommendations = () => {
-    const recommended = recipes.slice(0, 3);
-    setRecommendations(recommended);
+    const recommended = recipeData.slice(0, 3);
     setRecipes(recommended);
   };
 
