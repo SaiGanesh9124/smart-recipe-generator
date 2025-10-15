@@ -323,6 +323,45 @@ export const recipes = [
     "servings": 4,
     "nutritionalInfo": { "calories": 220, "protein": 28, "carbs": 18, "fat": 4 },
     "substitutions": { "white fish": ["shrimp", "scallops"], "lime": ["lemon"] }
+  },
+  {
+    "id": 26,
+    "name": "Spicy Mutton Curry",
+    "ingredients": ["mutton", "onion", "garlic", "ginger", "tomato", "curry powder", "coconut milk", "cilantro"],
+    "instructions": ["Cut mutton into chunks and marinate", "Brown mutton pieces in oil", "Sauté onions, garlic, and ginger", "Add tomatoes and spices", "Add mutton back and coconut milk", "Simmer for 45 minutes until tender"],
+    "cookingTime": 60,
+    "difficulty": "Medium",
+    "dietary": ["gluten-free"],
+    "cuisine": "Indian",
+    "servings": 4,
+    "nutritionalInfo": { "calories": 380, "protein": 32, "carbs": 8, "fat": 24 },
+    "substitutions": { "mutton": ["lamb", "beef"], "coconut milk": ["heavy cream"] }
+  },
+  {
+    "id": 27,
+    "name": "Mediterranean Lamb Stew",
+    "ingredients": ["lamb", "potato", "carrot", "onion", "garlic", "tomato", "rosemary", "olive oil"],
+    "instructions": ["Brown lamb pieces in olive oil", "Add chopped vegetables", "Season with herbs and spices", "Add tomatoes and broth", "Simmer for 1 hour until tender", "Serve with crusty bread"],
+    "cookingTime": 75,
+    "difficulty": "Medium",
+    "dietary": ["gluten-free"],
+    "cuisine": "Mediterranean",
+    "servings": 6,
+    "nutritionalInfo": { "calories": 420, "protein": 28, "carbs": 25, "fat": 22 },
+    "substitutions": { "lamb": ["mutton", "beef"], "rosemary": ["thyme"] }
+  },
+  {
+    "id": 28,
+    "name": "Mutton Biryani",
+    "ingredients": ["mutton", "rice", "onion", "garlic", "ginger", "yogurt", "saffron", "mint"],
+    "instructions": ["Marinate mutton in yogurt and spices", "Cook rice with whole spices", "Layer mutton and rice", "Add saffron soaked in milk", "Cook on low heat for 45 minutes", "Garnish with fried onions and mint"],
+    "cookingTime": 90,
+    "difficulty": "Hard",
+    "dietary": ["gluten-free"],
+    "cuisine": "Indian",
+    "servings": 6,
+    "nutritionalInfo": { "calories": 520, "protein": 30, "carbs": 55, "fat": 18 },
+    "substitutions": { "mutton": ["lamb", "chicken"], "saffron": ["turmind"] }
   }
 ];
 

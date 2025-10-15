@@ -22,7 +22,7 @@ function App() {
 
   const commonIngredients = [
     // Proteins
-    'chicken', 'beef', 'pork', 'fish', 'salmon', 'shrimp', 'eggs', 'tofu', 'lamb',
+    'chicken', 'beef', 'pork', 'fish', 'salmon', 'shrimp', 'eggs', 'tofu', 'lamb', 'mutton',
     // Dairy
     'milk', 'cheese', 'butter', 'cream', 'yogurt', 'mozzarella', 'parmesan',
     // Vegetables
@@ -65,11 +65,13 @@ function App() {
       const ingredientSynonyms = {
         'tomato': ['tomatoes', 'cherry tomato', 'roma tomato', 'tomato sauce'],
         'onion': ['onions', 'yellow onion', 'white onion', 'red onion'],
-        'bell pepper': ['pepper', 'peppers', 'capsicum', 'red pepper', 'green pepper'],
+        'bell pepper': ['peppers', 'capsicum', 'red pepper', 'green pepper'],
         'chicken': ['chicken breast', 'chicken thigh', 'poultry', 'ground chicken'],
         'beef': ['ground beef', 'beef steak', 'steak', 'beef strips'],
+        'mutton': ['lamb', 'goat meat', 'sheep meat'],
+        'lamb': ['mutton', 'lamb chops', 'ground lamb'],
         'cheese': ['cheddar', 'mozzarella', 'parmesan', 'feta cheese'],
-        'pasta': ['spaghetti', 'penne', 'noodles', 'egg noodles', 'rice noodles'],
+        'pasta': ['spaghetti', 'penne', 'noodles', 'egg noodles'],
         'rice': ['white rice', 'brown rice', 'jasmine rice', 'arborio rice'],
         'oil': ['olive oil', 'vegetable oil', 'cooking oil', 'sesame oil'],
         'milk': ['coconut milk', 'almond milk', 'whole milk'],
@@ -77,24 +79,32 @@ function App() {
         'fish': ['salmon', 'white fish', 'tuna', 'cod'],
         'egg': ['eggs', 'egg whites'],
         'garlic': ['garlic cloves', 'minced garlic'],
-        'ginger': ['fresh ginger', 'ground ginger']
+        'ginger': ['fresh ginger', 'ground ginger'],
+        'potato': ['potatoes', 'sweet potato'],
+        'carrot': ['carrots'],
+        'mushroom': ['mushrooms', 'button mushroom', 'shiitake']
       };
       
       const findIngredientMatch = (userIng, recipeIng) => {
         const normalizedUser = normalizeIngredient(userIng);
         const normalizedRecipe = normalizeIngredient(recipeIng);
         
-        // Direct match
-        if (normalizedUser === normalizedRecipe || 
-            normalizedUser.includes(normalizedRecipe) || 
-            normalizedRecipe.includes(normalizedUser)) {
+        // Direct exact match
+        if (normalizedUser === normalizedRecipe) {
           return true;
         }
         
-        // Synonym matching
+        // Check if user ingredient is contained in recipe ingredient (e.g., "tomato" matches "tomato sauce")
+        if (normalizedRecipe.includes(normalizedUser) && normalizedUser.length >= 3) {
+          return true;
+        }
+        
+        // Synonym matching - only if both ingredients map to the same base
         for (const [base, synonyms] of Object.entries(ingredientSynonyms)) {
-          if ((normalizedUser === base || synonyms.some(s => normalizeIngredient(s) === normalizedUser)) &&
-              (normalizedRecipe === base || synonyms.some(s => normalizeIngredient(s) === normalizedRecipe))) {
+          const userMatchesBase = normalizedUser === base || synonyms.some(s => normalizeIngredient(s) === normalizedUser);
+          const recipeMatchesBase = normalizedRecipe === base || synonyms.some(s => normalizeIngredient(s) === normalizedRecipe);
+          
+          if (userMatchesBase && recipeMatchesBase) {
             return true;
           }
         }
@@ -301,6 +311,10 @@ function App() {
     setRecipes(recommended);
   };
 
+  const loadAllRecipes = () => {
+    setRecipes([...recipeData]);
+  };
+
   const addIngredient = (ingredient) => {
     const current = ingredients.split(',').map(i => i.trim()).filter(i => i);
     if (!current.includes(ingredient)) {
@@ -443,6 +457,12 @@ function App() {
             onClick={() => { setCurrentView('recommendations'); loadRecommendations(); }}
           >
             ⭐ For You
+          </button>
+          <button 
+            className={currentView === 'browse' ? 'active' : ''}
+            onClick={() => { setCurrentView('browse'); loadAllRecipes(); }}
+          >
+            📚 Browse All
           </button>
         </div>
       </header>
@@ -622,6 +642,27 @@ function App() {
                 Here are {recipes.length} recipe{recipes.length !== 1 ? 's' : ''} we think you'll love
               </p>
             )}
+          </div>
+        )}
+
+        {currentView === 'browse' && (
+          <div className="browse-section">
+            <h2>📚 Browse All Recipes</h2>
+            <p>Explore our complete collection of {recipeData.length} delicious recipes</p>
+            <div className="recipe-stats">
+              <div className="stat-item">
+                <span className="stat-number">{recipeData.filter(r => r.difficulty === 'Easy').length}</span>
+                <span className="stat-label">Easy Recipes</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-number">{new Set(recipeData.map(r => r.cuisine)).size}</span>
+                <span className="stat-label">Cuisines</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-number">{recipeData.filter(r => r.cookingTime <= 30).length}</span>
+                <span className="stat-label">Quick Meals</span>
+              </div>
+            </div>
           </div>
         )}
 
