@@ -21,10 +21,19 @@ function App() {
   const fileInputRef = useRef(null);
 
   const commonIngredients = [
-    'chicken', 'beef', 'pork', 'fish', 'eggs', 'milk', 'cheese', 'butter',
+    // Proteins
+    'chicken', 'beef', 'pork', 'fish', 'salmon', 'shrimp', 'eggs', 'tofu', 'lamb',
+    // Dairy
+    'milk', 'cheese', 'butter', 'cream', 'yogurt', 'mozzarella', 'parmesan',
+    // Vegetables
     'tomato', 'onion', 'garlic', 'potato', 'carrot', 'broccoli', 'spinach',
-    'rice', 'pasta', 'bread', 'flour', 'olive oil', 'salt', 'pepper',
-    'basil', 'oregano', 'lemon', 'lime', 'bell pepper', 'mushroom'
+    'bell pepper', 'mushroom', 'cucumber', 'lettuce', 'avocado', 'corn', 'zucchini',
+    'eggplant', 'celery', 'ginger', 'cilantro', 'basil', 'oregano',
+    // Grains & Starches
+    'rice', 'pasta', 'bread', 'flour', 'quinoa', 'couscous', 'noodles',
+    // Pantry Staples
+    'olive oil', 'soy sauce', 'salt', 'pepper', 'lemon', 'lime', 'honey',
+    'vinegar', 'coconut milk', 'black beans', 'chickpeas', 'lentils'
   ];
 
   // Local data - no API needed
@@ -44,23 +53,109 @@ function App() {
     setTimeout(() => {
       const availableIngredients = ingredients.toLowerCase().split(',').map(i => i.trim());
       
+      // Enhanced matching algorithm with fuzzy matching and ingredient variations
+      const normalizeIngredient = (ing) => {
+        return ing.toLowerCase()
+          .replace(/s$/, '') // Remove plural 's'
+          .replace(/es$/, '') // Remove plural 'es'
+          .replace(/ies$/, 'y') // Replace 'ies' with 'y'
+          .trim();
+      };
+      
+      const ingredientSynonyms = {
+        'tomato': ['tomatoes', 'cherry tomato', 'roma tomato', 'tomato sauce'],
+        'onion': ['onions', 'yellow onion', 'white onion', 'red onion'],
+        'bell pepper': ['pepper', 'peppers', 'capsicum', 'red pepper', 'green pepper'],
+        'chicken': ['chicken breast', 'chicken thigh', 'poultry', 'ground chicken'],
+        'beef': ['ground beef', 'beef steak', 'steak', 'beef strips'],
+        'cheese': ['cheddar', 'mozzarella', 'parmesan', 'feta cheese'],
+        'pasta': ['spaghetti', 'penne', 'noodles', 'egg noodles', 'rice noodles'],
+        'rice': ['white rice', 'brown rice', 'jasmine rice', 'arborio rice'],
+        'oil': ['olive oil', 'vegetable oil', 'cooking oil', 'sesame oil'],
+        'milk': ['coconut milk', 'almond milk', 'whole milk'],
+        'beans': ['black beans', 'kidney beans', 'chickpeas', 'lentils'],
+        'fish': ['salmon', 'white fish', 'tuna', 'cod'],
+        'egg': ['eggs', 'egg whites'],
+        'garlic': ['garlic cloves', 'minced garlic'],
+        'ginger': ['fresh ginger', 'ground ginger']
+      };
+      
+      const findIngredientMatch = (userIng, recipeIng) => {
+        const normalizedUser = normalizeIngredient(userIng);
+        const normalizedRecipe = normalizeIngredient(recipeIng);
+        
+        // Direct match
+        if (normalizedUser === normalizedRecipe || 
+            normalizedUser.includes(normalizedRecipe) || 
+            normalizedRecipe.includes(normalizedUser)) {
+          return true;
+        }
+        
+        // Synonym matching
+        for (const [base, synonyms] of Object.entries(ingredientSynonyms)) {
+          if ((normalizedUser === base || synonyms.some(s => normalizeIngredient(s) === normalizedUser)) &&
+              (normalizedRecipe === base || synonyms.some(s => normalizeIngredient(s) === normalizedRecipe))) {
+            return true;
+          }
+        }
+        
+        return false;
+      };
+      
       let filteredRecipes = recipeData.map(recipe => {
         let matchCount = 0;
         const missingIngredients = [];
+        const matchedIngredients = [];
         
         recipe.ingredients.forEach(ingredient => {
-          if (availableIngredients.some(userIng => 
-            ingredient.toLowerCase().includes(userIng) || userIng.includes(ingredient.toLowerCase())
-          )) {
-            matchCount++;
-          } else {
+          let found = false;
+          for (const userIng of availableIngredients) {
+            if (findIngredientMatch(userIng, ingredient)) {
+              matchCount++;
+              matchedIngredients.push(ingredient);
+              found = true;
+              break;
+            }
+          }
+          if (!found) {
             missingIngredients.push(ingredient);
           }
         });
 
-        const score = (matchCount / recipe.ingredients.length) * 100;
-        return { ...recipe, matchScore: score, missingIngredients };
-      }).filter(recipe => recipe.matchScore > 0);
+        // Enhanced scoring: bonus for more matches, penalty for missing ingredients
+        let score = (matchCount / recipe.ingredients.length) * 100;
+        
+        // Only proceed if we have at least 1 matching ingredient
+        if (matchCount === 0) {
+          score = 0;
+        } else {
+          // Bonus for having many matching ingredients
+          if (matchCount >= 3) score += 15;
+          if (matchCount >= 5) score += 25;
+          
+          // Bonus for high match percentage
+          const matchPercentage = (matchCount / recipe.ingredients.length);
+          if (matchPercentage >= 0.7) score += 20;
+          if (matchPercentage >= 0.5) score += 10;
+          
+          // Slight bonus for recipes with fewer total ingredients (easier to make)
+          if (recipe.ingredients.length <= 6) score += 5;
+          
+          // Bonus for recipes where user has most ingredients
+          if (missingIngredients.length <= 2) score += 15;
+        }
+        
+        return { 
+          ...recipe, 
+          matchScore: Math.min(score, 100), 
+          missingIngredients,
+          matchedIngredients,
+          matchCount 
+        };
+      }).filter(recipe => {
+        // Only show recipes that have at least one matching ingredient
+        return recipe.matchScore > 0 && recipe.matchCount > 0;
+      });
 
       // Apply filters
       if (filters.dietary) {
@@ -87,7 +182,21 @@ function App() {
         );
       }
 
-      filteredRecipes.sort((a, b) => b.matchScore - a.matchScore);
+      // Enhanced sorting: prioritize match score, then match count, then fewer missing ingredients
+      filteredRecipes.sort((a, b) => {
+        if (Math.abs(a.matchScore - b.matchScore) < 5) {
+          // If scores are close, prefer more matched ingredients
+          if (a.matchCount !== b.matchCount) {
+            return b.matchCount - a.matchCount;
+          }
+          // Then prefer fewer missing ingredients
+          return a.missingIngredients.length - b.missingIngredients.length;
+        }
+        return b.matchScore - a.matchScore;
+      });
+      
+      // Limit to top 12 results for better performance
+      filteredRecipes = filteredRecipes.slice(0, 12);
       
       if (filteredRecipes.length === 0) {
         setError('No recipes found. Try different ingredients or filters.');
@@ -159,7 +268,36 @@ function App() {
   };
 
   const loadRecommendations = () => {
-    const recommended = recipeData.slice(0, 3);
+    // Get recipes based on user ratings - prefer highly rated recipes and similar ones
+    const ratedRecipes = Object.keys(userRatings).map(id => ({
+      id: parseInt(id),
+      rating: userRatings[id]
+    }));
+    
+    if (ratedRecipes.length === 0) {
+      // If no ratings, show popular recipes (shorter cooking time, easy difficulty)
+      const recommended = recipeData
+        .filter(r => r.difficulty === 'Easy' && r.cookingTime <= 30)
+        .slice(0, 6);
+      setRecipes(recommended);
+      return;
+    }
+    
+    // Get highly rated recipes (4+ stars) and find similar cuisines
+    const highlyRated = ratedRecipes.filter(r => r.rating >= 4);
+    const preferredCuisines = highlyRated.map(r => {
+      const recipe = recipeData.find(rec => rec.id === r.id);
+      return recipe?.cuisine;
+    }).filter(Boolean);
+    
+    // Recommend recipes from preferred cuisines that user hasn't rated
+    const recommended = recipeData
+      .filter(recipe => 
+        !userRatings[recipe.id] && 
+        (preferredCuisines.includes(recipe.cuisine) || recipe.difficulty === 'Easy')
+      )
+      .slice(0, 8);
+    
     setRecipes(recommended);
   };
 
@@ -253,9 +391,28 @@ function App() {
             </button>
             
             <div className="rating">
-              {[1,2,3,4,5].map(star => (
-                <button key={star} onClick={() => rateRecipe(selectedRecipe.id, star)}>⭐</button>
-              ))}
+              <span className="rating-label">Rate this recipe:</span>
+              {[1,2,3,4,5].map(star => {
+                const userRating = userRatings[selectedRecipe.id];
+                let className = '';
+                if (userRating >= star) {
+                  className = `rated-${userRating}`;
+                }
+                return (
+                  <button 
+                    key={star} 
+                    className={className}
+                    onClick={() => rateRecipe(selectedRecipe.id, star)}
+                  >
+                    ⭐
+                  </button>
+                );
+              })}
+              {userRatings[selectedRecipe.id] && (
+                <span style={{marginLeft: '1rem', color: '#666', fontSize: '0.9rem'}}>
+                  ({userRatings[selectedRecipe.id]}/5 stars)
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -292,7 +449,7 @@ function App() {
       
       <main>
         {currentView === 'search' && (
-          <>
+          <div className="search-section">
             <div className="input-section">
               <div className="search-container">
                 <input
@@ -432,24 +589,38 @@ function App() {
                 <option value="Mediterranean">Mediterranean</option>
               </select>
             </div>
-          </>
+          </div>
         )}
 
         {currentView === 'favorites' && (
           <div className="favorites-section">
-            <h2>Your Favorite Recipes</h2>
-            {recipes.length === 0 && (
-              <p className="no-favorites">No favorites yet. Start exploring recipes!</p>
+            <h2>❤️ Your Favorite Recipes</h2>
+            {recipes.length === 0 ? (
+              <div className="no-favorites">
+                <h3>No favorites yet!</h3>
+                <p>Start exploring recipes and click the ❤️ button to save your favorites here.</p>
+              </div>
+            ) : (
+              <p style={{color: '#555', marginBottom: '2rem', fontSize: '1.1rem'}}>
+                You have {recipes.length} favorite recipe{recipes.length !== 1 ? 's' : ''}
+              </p>
             )}
           </div>
         )}
 
         {currentView === 'recommendations' && (
           <div className="recommendations-section">
-            <h2>Recommended For You</h2>
-            <p>Based on your ratings and preferences</p>
-            {recipes.length === 0 && (
-              <p className="no-recommendations">Rate some recipes to get personalized recommendations!</p>
+            <h2>⭐ Recommended For You</h2>
+            <p>Discover new recipes based on your ratings and preferences</p>
+            {recipes.length === 0 ? (
+              <div className="no-recommendations">
+                <h3>No recommendations yet!</h3>
+                <p>Rate some recipes to get personalized recommendations tailored just for you.</p>
+              </div>
+            ) : (
+              <p style={{color: '#555', marginBottom: '2rem', fontSize: '1.1rem'}}>
+                Here are {recipes.length} recipe{recipes.length !== 1 ? 's' : ''} we think you'll love
+              </p>
             )}
           </div>
         )}
@@ -472,20 +643,26 @@ function App() {
               </div>
               
               <div className="recipe-info">
-                <span>🕒 {recipe.cookingTime} min</span>
-                <span>👨🍳 {recipe.difficulty}</span>
-                <span>🌍 {recipe.cuisine}</span>
+                <span className="time-badge">🕒 {recipe.cookingTime} min</span>
+                <span className={`difficulty-badge difficulty-${recipe.difficulty.toLowerCase()}`}>👨🍳 {recipe.difficulty}</span>
+                <span className="cuisine-badge">🌍 {recipe.cuisine}</span>
+                {recipe.dietary && recipe.dietary.length > 0 && (
+                  <span className="dietary-badge">🌱 {recipe.dietary[0]}</span>
+                )}
               </div>
               
               {currentView === 'search' && recipe.matchScore && (
                 <div className="match-score">
+                  <div className="match-info">
+                    <span className="match-percentage">{Math.round(recipe.matchScore)}% match</span>
+                    <span className="match-details">({recipe.matchCount}/{recipe.ingredients.length} ingredients)</span>
+                  </div>
                   <div className="match-bar">
                     <div 
                       className="match-fill" 
                       style={{ width: `${recipe.matchScore}%` }}
                     ></div>
                   </div>
-                  <span>{Math.round(recipe.matchScore)}% match</span>
                 </div>
               )}
               
@@ -494,11 +671,22 @@ function App() {
                 <span>{recipe.nutritionalInfo.protein}g protein</span>
               </div>
               
-              {recipe.missingIngredients?.length > 0 && (
-                <div className="missing-ingredients">
-                  <small>Missing: {recipe.missingIngredients.slice(0, 3).join(', ')}
-                    {recipe.missingIngredients.length > 3 && '...'}
-                  </small>
+              {currentView === 'search' && (
+                <div className="ingredient-status">
+                  {recipe.matchedIngredients?.length > 0 && (
+                    <div className="matched-ingredients">
+                      <small>✅ Have: {recipe.matchedIngredients.slice(0, 3).join(', ')}
+                        {recipe.matchedIngredients.length > 3 && ` +${recipe.matchedIngredients.length - 3} more`}
+                      </small>
+                    </div>
+                  )}
+                  {recipe.missingIngredients?.length > 0 && (
+                    <div className="missing-ingredients">
+                      <small>❌ Need: {recipe.missingIngredients.slice(0, 3).join(', ')}
+                        {recipe.missingIngredients.length > 3 && ` +${recipe.missingIngredients.length - 3} more`}
+                      </small>
+                    </div>
+                  )}
                 </div>
               )}
               

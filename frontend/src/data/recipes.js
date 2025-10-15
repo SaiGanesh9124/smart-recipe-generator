@@ -3,71 +3,350 @@ export const recipes = [
     "id": 1,
     "name": "Classic Tomato Pasta",
     "ingredients": ["pasta", "tomato", "garlic", "onion", "olive oil", "basil"],
-    "instructions": ["Boil pasta", "Sauté onion and garlic", "Add tomatoes and basil", "Mix with pasta"],
+    "instructions": ["Boil pasta according to package directions", "Heat olive oil in a large pan", "Sauté chopped onion and garlic until fragrant", "Add diced tomatoes and fresh basil", "Simmer for 10 minutes", "Toss with cooked pasta and serve"],
     "cookingTime": 20,
     "difficulty": "Easy",
     "dietary": ["vegetarian"],
     "cuisine": "Italian",
     "servings": 4,
     "nutritionalInfo": { "calories": 450, "protein": 15, "carbs": 65, "fat": 12 },
-    "substitutions": { "pasta": ["rice"], "basil": ["oregano"] }
+    "substitutions": { "pasta": ["rice", "zucchini noodles"], "basil": ["oregano", "parsley"] }
   },
   {
     "id": 2,
-    "name": "Chicken Salad",
+    "name": "Grilled Chicken Salad",
     "ingredients": ["chicken", "lettuce", "tomato", "cucumber", "olive oil", "lemon"],
-    "instructions": ["Grill chicken", "Chop vegetables", "Combine ingredients", "Add dressing"],
+    "instructions": ["Season and grill chicken breast until cooked through", "Let chicken rest, then slice", "Wash and chop lettuce, tomato, and cucumber", "Arrange vegetables on plates", "Top with sliced chicken", "Drizzle with olive oil and lemon juice"],
     "cookingTime": 25,
     "difficulty": "Easy",
     "dietary": ["gluten-free"],
     "cuisine": "Mediterranean",
     "servings": 2,
     "nutritionalInfo": { "calories": 350, "protein": 30, "carbs": 8, "fat": 18 },
-    "substitutions": { "chicken": ["tofu"], "lettuce": ["spinach"] }
+    "substitutions": { "chicken": ["tofu", "chickpeas"], "lettuce": ["spinach", "arugula"] }
   },
   {
     "id": 3,
-    "name": "Vegetable Stir Fry",
+    "name": "Asian Vegetable Stir Fry",
     "ingredients": ["broccoli", "carrot", "bell pepper", "soy sauce", "garlic", "ginger", "rice"],
-    "instructions": ["Heat oil", "Add garlic and ginger", "Stir-fry vegetables", "Serve over rice"],
+    "instructions": ["Cook rice according to package directions", "Heat oil in a wok or large pan", "Add minced garlic and ginger, stir for 30 seconds", "Add chopped vegetables and stir-fry for 5-7 minutes", "Add soy sauce and cook for 2 more minutes", "Serve hot over rice"],
     "cookingTime": 15,
     "difficulty": "Easy",
     "dietary": ["vegetarian", "vegan"],
     "cuisine": "Asian",
     "servings": 3,
     "nutritionalInfo": { "calories": 280, "protein": 8, "carbs": 45, "fat": 6 },
-    "substitutions": { "soy sauce": ["tamari"], "rice": ["quinoa"] }
+    "substitutions": { "soy sauce": ["tamari", "coconut aminos"], "rice": ["quinoa", "cauliflower rice"] }
   },
   {
     "id": 4,
-    "name": "Greek Salad",
-    "ingredients": ["cucumber", "tomato", "red onion", "feta cheese", "olives", "olive oil"],
-    "instructions": ["Chop vegetables", "Add olives and feta", "Drizzle with olive oil"],
+    "name": "Traditional Greek Salad",
+    "ingredients": ["cucumber", "tomato", "red onion", "feta cheese", "olives", "olive oil", "oregano"],
+    "instructions": ["Dice cucumber and tomatoes into chunks", "Thinly slice red onion", "Combine vegetables in a large bowl", "Add olives and crumbled feta cheese", "Drizzle with olive oil", "Sprinkle with oregano and serve"],
     "cookingTime": 10,
     "difficulty": "Easy",
     "dietary": ["vegetarian", "gluten-free"],
     "cuisine": "Greek",
     "servings": 2,
     "nutritionalInfo": { "calories": 220, "protein": 8, "carbs": 12, "fat": 16 },
-    "substitutions": { "feta cheese": ["goat cheese"], "olives": ["capers"] }
+    "substitutions": { "feta cheese": ["goat cheese", "vegan feta"], "olives": ["capers", "sun-dried tomatoes"] }
   },
   {
     "id": 5,
-    "name": "Beef Tacos",
-    "ingredients": ["ground beef", "tortilla", "onion", "tomato", "lettuce", "cheese"],
-    "instructions": ["Brown beef with onion", "Warm tortillas", "Fill with beef", "Add toppings"],
+    "name": "Spicy Beef Tacos",
+    "ingredients": ["ground beef", "tortilla", "onion", "tomato", "lettuce", "cheese", "cumin", "chili powder"],
+    "instructions": ["Brown ground beef in a large skillet", "Add diced onion and cook until soft", "Season with cumin and chili powder", "Warm tortillas in a dry pan", "Fill tortillas with beef mixture", "Top with lettuce, tomato, and cheese"],
     "cookingTime": 20,
     "difficulty": "Easy",
     "dietary": [],
     "cuisine": "Mexican",
     "servings": 4,
     "nutritionalInfo": { "calories": 420, "protein": 25, "carbs": 30, "fat": 22 },
-    "substitutions": { "ground beef": ["ground turkey"], "cheese": ["avocado"] }
+    "substitutions": { "ground beef": ["ground turkey", "lentils"], "cheese": ["avocado", "cashew cream"] }
+  },
+  {
+    "id": 6,
+    "name": "Creamy Mushroom Risotto",
+    "ingredients": ["arborio rice", "mushroom", "onion", "garlic", "vegetable broth", "parmesan", "white wine", "butter"],
+    "instructions": ["Heat vegetable broth in a separate pot", "Sauté diced onion and garlic in butter", "Add arborio rice and stir for 2 minutes", "Add white wine and stir until absorbed", "Gradually add warm broth, stirring constantly", "Fold in sautéed mushrooms and parmesan"],
+    "cookingTime": 35,
+    "difficulty": "Medium",
+    "dietary": ["vegetarian"],
+    "cuisine": "Italian",
+    "servings": 4,
+    "nutritionalInfo": { "calories": 380, "protein": 12, "carbs": 58, "fat": 8 },
+    "substitutions": { "arborio rice": ["short grain rice"], "parmesan": ["nutritional yeast"] }
+  },
+  {
+    "id": 7,
+    "name": "Spicy Chicken Curry",
+    "ingredients": ["chicken", "onion", "garlic", "ginger", "curry powder", "coconut milk", "tomato", "cilantro"],
+    "instructions": ["Cut chicken into bite-sized pieces", "Sauté onion, garlic, and ginger until fragrant", "Add chicken and cook until browned", "Stir in curry powder and cook for 1 minute", "Add diced tomatoes and coconut milk", "Simmer for 20 minutes, garnish with cilantro"],
+    "cookingTime": 35,
+    "difficulty": "Medium",
+    "dietary": ["gluten-free"],
+    "cuisine": "Indian",
+    "servings": 4,
+    "nutritionalInfo": { "calories": 320, "protein": 28, "carbs": 8, "fat": 20 },
+    "substitutions": { "chicken": ["tofu", "cauliflower"], "coconut milk": ["heavy cream"] }
+  },
+  {
+    "id": 8,
+    "name": "Quinoa Power Bowl",
+    "ingredients": ["quinoa", "black beans", "avocado", "corn", "lime", "cilantro", "bell pepper", "red onion"],
+    "instructions": ["Cook quinoa according to package directions", "Rinse and drain black beans", "Dice avocado and bell pepper", "Finely chop red onion and cilantro", "Combine all ingredients in a bowl", "Dress with lime juice and serve"],
+    "cookingTime": 20,
+    "difficulty": "Easy",
+    "dietary": ["vegetarian", "vegan", "gluten-free"],
+    "cuisine": "Mexican",
+    "servings": 3,
+    "nutritionalInfo": { "calories": 340, "protein": 14, "carbs": 52, "fat": 10 },
+    "substitutions": { "quinoa": ["rice", "couscous"], "black beans": ["chickpeas", "pinto beans"] }
+  },
+  {
+    "id": 9,
+    "name": "Teriyaki Salmon",
+    "ingredients": ["salmon", "soy sauce", "honey", "garlic", "ginger", "rice", "broccoli", "sesame seeds"],
+    "instructions": ["Mix soy sauce, honey, minced garlic, and ginger for marinade", "Marinate salmon fillets for 15 minutes", "Pan-fry salmon for 4 minutes each side", "Steam broccoli until tender", "Cook rice according to package directions", "Serve salmon over rice with broccoli, sprinkle with sesame seeds"],
+    "cookingTime": 30,
+    "difficulty": "Medium",
+    "dietary": ["gluten-free"],
+    "cuisine": "Japanese",
+    "servings": 2,
+    "nutritionalInfo": { "calories": 420, "protein": 35, "carbs": 45, "fat": 12 },
+    "substitutions": { "salmon": ["tofu", "chicken"], "honey": ["maple syrup"] }
+  },
+  {
+    "id": 10,
+    "name": "Fresh Caprese Salad",
+    "ingredients": ["tomato", "mozzarella", "basil", "olive oil", "balsamic vinegar", "salt", "pepper"],
+    "instructions": ["Slice tomatoes and fresh mozzarella into rounds", "Arrange alternating slices on a platter", "Tuck fresh basil leaves between slices", "Drizzle with olive oil and balsamic vinegar", "Season with salt and pepper", "Let sit for 10 minutes before serving"],
+    "cookingTime": 5,
+    "difficulty": "Easy",
+    "dietary": ["vegetarian", "gluten-free"],
+    "cuisine": "Italian",
+    "servings": 2,
+    "nutritionalInfo": { "calories": 180, "protein": 12, "carbs": 6, "fat": 14 },
+    "substitutions": { "mozzarella": ["burrata", "vegan cheese"] }
+  },
+  {
+    "id": 11,
+    "name": "Hearty Lentil Soup",
+    "ingredients": ["lentils", "carrot", "celery", "onion", "garlic", "vegetable broth", "bay leaves", "thyme"],
+    "instructions": ["Dice carrot, celery, and onion", "Sauté vegetables in oil until soft", "Add minced garlic and cook for 1 minute", "Add lentils, broth, bay leaves, and thyme", "Bring to boil, then simmer for 25 minutes", "Remove bay leaves and season to taste"],
+    "cookingTime": 35,
+    "difficulty": "Easy",
+    "dietary": ["vegetarian", "vegan", "gluten-free"],
+    "cuisine": "Mediterranean",
+    "servings": 4,
+    "nutritionalInfo": { "calories": 240, "protein": 16, "carbs": 40, "fat": 2 },
+    "substitutions": { "lentils": ["split peas"], "vegetable broth": ["chicken broth"] }
+  },
+  {
+    "id": 12,
+    "name": "Thai Pad Thai",
+    "ingredients": ["rice noodles", "shrimp", "egg", "bean sprouts", "peanuts", "lime", "fish sauce", "tamarind"],
+    "instructions": ["Soak rice noodles in warm water until soft", "Heat oil in wok over high heat", "Scramble eggs and set aside", "Add shrimp and cook until pink", "Add drained noodles and sauce mixture", "Toss with bean sprouts, eggs, peanuts, and lime"],
+    "cookingTime": 25,
+    "difficulty": "Medium",
+    "dietary": ["gluten-free"],
+    "cuisine": "Thai",
+    "servings": 3,
+    "nutritionalInfo": { "calories": 380, "protein": 22, "carbs": 48, "fat": 12 },
+    "substitutions": { "shrimp": ["tofu", "chicken"], "fish sauce": ["soy sauce"] }
+  },
+  {
+    "id": 13,
+    "name": "Classic Margherita Pizza",
+    "ingredients": ["pizza dough", "tomato sauce", "mozzarella", "basil", "olive oil", "garlic"],
+    "instructions": ["Preheat oven to 475°F (245°C)", "Roll out pizza dough on floured surface", "Spread tomato sauce evenly", "Add torn mozzarella pieces", "Drizzle with olive oil", "Bake for 12-15 minutes, top with fresh basil"],
+    "cookingTime": 20,
+    "difficulty": "Medium",
+    "dietary": ["vegetarian"],
+    "cuisine": "Italian",
+    "servings": 4,
+    "nutritionalInfo": { "calories": 320, "protein": 14, "carbs": 42, "fat": 12 },
+    "substitutions": { "pizza dough": ["cauliflower crust"], "mozzarella": ["vegan cheese"] }
+  },
+  {
+    "id": 14,
+    "name": "Classic Caesar Salad",
+    "ingredients": ["romaine lettuce", "parmesan", "croutons", "anchovy", "garlic", "lemon", "olive oil", "egg"],
+    "instructions": ["Wash and chop romaine lettuce", "Make dressing with anchovy, garlic, lemon, and egg", "Slowly whisk in olive oil", "Toss lettuce with dressing", "Top with grated parmesan and croutons", "Serve immediately"],
+    "cookingTime": 15,
+    "difficulty": "Easy",
+    "dietary": [],
+    "cuisine": "American",
+    "servings": 2,
+    "nutritionalInfo": { "calories": 280, "protein": 8, "carbs": 18, "fat": 20 },
+    "substitutions": { "anchovy": ["capers"], "croutons": ["nuts"] }
+  },
+  {
+    "id": 15,
+    "name": "Fluffy Pancakes",
+    "ingredients": ["flour", "milk", "egg", "sugar", "baking powder", "butter", "maple syrup", "vanilla"],
+    "instructions": ["Mix dry ingredients in a large bowl", "Whisk milk, egg, melted butter, and vanilla", "Combine wet and dry ingredients until just mixed", "Heat griddle over medium heat", "Pour batter and cook until bubbles form", "Flip and cook until golden, serve with syrup"],
+    "cookingTime": 20,
+    "difficulty": "Easy",
+    "dietary": ["vegetarian"],
+    "cuisine": "American",
+    "servings": 4,
+    "nutritionalInfo": { "calories": 320, "protein": 8, "carbs": 52, "fat": 8 },
+    "substitutions": { "flour": ["almond flour"], "milk": ["almond milk"] }
+  },
+  {
+    "id": 16,
+    "name": "Beef Stroganoff",
+    "ingredients": ["beef", "mushroom", "onion", "sour cream", "flour", "butter", "beef broth", "egg noodles"],
+    "instructions": ["Cut beef into strips and season", "Sauté mushrooms and onions", "Brown beef strips", "Make cream sauce with flour and broth", "Combine all ingredients", "Serve over egg noodles"],
+    "cookingTime": 45,
+    "difficulty": "Medium",
+    "dietary": [],
+    "cuisine": "Russian",
+    "servings": 4,
+    "nutritionalInfo": { "calories": 520, "protein": 32, "carbs": 35, "fat": 28 },
+    "substitutions": { "sour cream": ["greek yogurt"], "beef": ["chicken", "mushrooms"] }
+  },
+  {
+    "id": 17,
+    "name": "Moroccan Tagine",
+    "ingredients": ["lamb", "apricot", "onion", "cinnamon", "ginger", "chickpeas", "almonds", "couscous"],
+    "instructions": ["Brown lamb pieces", "Add spices and aromatics", "Add dried apricots and chickpeas", "Slow cook for 1.5 hours", "Toast almonds", "Serve over couscous with almonds"],
+    "cookingTime": 120,
+    "difficulty": "Hard",
+    "dietary": [],
+    "cuisine": "Moroccan",
+    "servings": 6,
+    "nutritionalInfo": { "calories": 480, "protein": 28, "carbs": 42, "fat": 22 },
+    "substitutions": { "lamb": ["chicken", "beef"], "apricot": ["dates", "raisins"] }
+  },
+  {
+    "id": 18,
+    "name": "Korean Bibimbap",
+    "ingredients": ["rice", "beef", "spinach", "carrot", "mushroom", "egg", "sesame oil", "gochujang"],
+    "instructions": ["Cook rice and keep warm", "Marinate and cook beef", "Blanch spinach and season", "Sauté carrots and mushrooms separately", "Fry eggs sunny-side up", "Arrange over rice with gochujang"],
+    "cookingTime": 40,
+    "difficulty": "Medium",
+    "dietary": ["gluten-free"],
+    "cuisine": "Korean",
+    "servings": 4,
+    "nutritionalInfo": { "calories": 420, "protein": 24, "carbs": 48, "fat": 14 },
+    "substitutions": { "beef": ["tofu", "tempeh"], "gochujang": ["sriracha"] }
+  },
+  {
+    "id": 19,
+    "name": "French Ratatouille",
+    "ingredients": ["eggplant", "zucchini", "bell pepper", "tomato", "onion", "garlic", "thyme", "olive oil"],
+    "instructions": ["Dice all vegetables uniformly", "Sauté onions and garlic", "Add peppers and cook", "Add eggplant and zucchini", "Add tomatoes and herbs", "Simmer until tender"],
+    "cookingTime": 35,
+    "difficulty": "Easy",
+    "dietary": ["vegetarian", "vegan", "gluten-free"],
+    "cuisine": "French",
+    "servings": 4,
+    "nutritionalInfo": { "calories": 180, "protein": 4, "carbs": 28, "fat": 8 },
+    "substitutions": { "eggplant": ["mushrooms"], "thyme": ["oregano", "basil"] }
+  },
+  {
+    "id": 20,
+    "name": "Brazilian Feijoada",
+    "ingredients": ["black beans", "pork", "sausage", "onion", "garlic", "bay leaves", "orange", "rice"],
+    "instructions": ["Soak beans overnight", "Brown meats separately", "Sauté onions and garlic", "Combine beans, meats, and aromatics", "Slow cook for 2 hours", "Serve with rice and orange slices"],
+    "cookingTime": 150,
+    "difficulty": "Hard",
+    "dietary": [],
+    "cuisine": "Brazilian",
+    "servings": 8,
+    "nutritionalInfo": { "calories": 580, "protein": 35, "carbs": 45, "fat": 28 },
+    "substitutions": { "pork": ["chicken", "turkey"], "sausage": ["chorizo"] }
+  },
+  {
+    "id": 21,
+    "name": "Indian Butter Chicken",
+    "ingredients": ["chicken", "butter", "tomato", "cream", "garam masala", "ginger", "garlic", "naan"],
+    "instructions": ["Marinate chicken in yogurt and spices", "Grill or pan-fry chicken", "Make tomato-based sauce", "Add cream and butter", "Simmer chicken in sauce", "Serve with naan bread"],
+    "cookingTime": 45,
+    "difficulty": "Medium",
+    "dietary": ["gluten-free"],
+    "cuisine": "Indian",
+    "servings": 4,
+    "nutritionalInfo": { "calories": 450, "protein": 32, "carbs": 12, "fat": 28 },
+    "substitutions": { "cream": ["coconut milk"], "chicken": ["paneer", "tofu"] }
+  },
+  {
+    "id": 22,
+    "name": "Spanish Paella",
+    "ingredients": ["rice", "shrimp", "chicken", "saffron", "bell pepper", "peas", "tomato", "garlic"],
+    "instructions": ["Heat oil in paella pan", "Brown chicken pieces", "Add rice and saffron", "Add broth gradually", "Add shrimp and vegetables", "Cook until rice is tender"],
+    "cookingTime": 50,
+    "difficulty": "Hard",
+    "dietary": ["gluten-free"],
+    "cuisine": "Spanish",
+    "servings": 6,
+    "nutritionalInfo": { "calories": 420, "protein": 28, "carbs": 52, "fat": 12 },
+    "substitutions": { "saffron": ["turmeric"], "shrimp": ["mussels", "clams"] }
+  },
+  {
+    "id": 23,
+    "name": "Vietnamese Pho",
+    "ingredients": ["rice noodles", "beef", "onion", "ginger", "star anise", "fish sauce", "lime", "cilantro"],
+    "instructions": ["Make broth with bones and spices", "Simmer for 6+ hours", "Prepare rice noodles", "Slice beef thinly", "Assemble bowls with noodles and beef", "Pour hot broth over, garnish with herbs"],
+    "cookingTime": 400,
+    "difficulty": "Hard",
+    "dietary": ["gluten-free"],
+    "cuisine": "Vietnamese",
+    "servings": 4,
+    "nutritionalInfo": { "calories": 380, "protein": 25, "carbs": 45, "fat": 8 },
+    "substitutions": { "beef": ["chicken", "tofu"], "fish sauce": ["soy sauce"] }
+  },
+  {
+    "id": 24,
+    "name": "Ethiopian Doro Wat",
+    "ingredients": ["chicken", "berbere spice", "onion", "garlic", "ginger", "egg", "injera bread", "butter"],
+    "instructions": ["Slowly cook onions until caramelized", "Add berbere spice and aromatics", "Add chicken pieces", "Simmer in spiced sauce", "Add hard-boiled eggs", "Serve with injera bread"],
+    "cookingTime": 90,
+    "difficulty": "Medium",
+    "dietary": [],
+    "cuisine": "Ethiopian",
+    "servings": 6,
+    "nutritionalInfo": { "calories": 420, "protein": 30, "carbs": 18, "fat": 24 },
+    "substitutions": { "berbere spice": ["paprika + cayenne"], "injera": ["flatbread"] }
+  },
+  {
+    "id": 25,
+    "name": "Peruvian Ceviche",
+    "ingredients": ["white fish", "lime", "red onion", "cilantro", "chili pepper", "sweet potato", "corn", "salt"],
+    "instructions": ["Cut fish into small cubes", "Marinate in lime juice for 15 minutes", "Add diced red onion and chili", "Season with salt", "Garnish with cilantro", "Serve with sweet potato and corn"],
+    "cookingTime": 20,
+    "difficulty": "Easy",
+    "dietary": ["gluten-free"],
+    "cuisine": "Peruvian",
+    "servings": 4,
+    "nutritionalInfo": { "calories": 220, "protein": 28, "carbs": 18, "fat": 4 },
+    "substitutions": { "white fish": ["shrimp", "scallops"], "lime": ["lemon"] }
   }
 ];
 
 export const mockImageRecognition = () => {
-  const ingredients = ['tomato', 'onion', 'garlic', 'chicken', 'pasta', 'carrot', 'bell pepper'];
-  const count = Math.floor(Math.random() * 4) + 2;
-  return ingredients.sort(() => 0.5 - Math.random()).slice(0, count);
+  const realisticSets = {
+    'fresh_produce': ['tomato', 'lettuce', 'cucumber', 'bell pepper', 'onion'],
+    'meat_dish': ['chicken', 'beef', 'pork', 'garlic', 'onion'],
+    'seafood': ['salmon', 'shrimp', 'fish', 'lemon', 'dill'],
+    'pasta_ingredients': ['pasta', 'tomato', 'basil', 'garlic', 'parmesan'],
+    'asian_cooking': ['rice', 'soy sauce', 'ginger', 'garlic', 'broccoli'],
+    'mexican_food': ['avocado', 'lime', 'cilantro', 'onion', 'tomato'],
+    'breakfast_items': ['egg', 'milk', 'flour', 'butter', 'vanilla'],
+    'soup_base': ['carrot', 'celery', 'onion', 'garlic', 'bay leaves'],
+    'salad_mix': ['lettuce', 'cucumber', 'tomato', 'olive oil', 'lemon'],
+    'indian_spices': ['curry powder', 'ginger', 'garlic', 'onion', 'cilantro'],
+    'mediterranean': ['olive oil', 'tomato', 'feta cheese', 'olives', 'oregano'],
+    'stir_fry': ['bell pepper', 'broccoli', 'carrot', 'garlic', 'soy sauce']
+  };
+  
+  const categories = Object.keys(realisticSets);
+  const selectedCategory = categories[Math.floor(Math.random() * categories.length)];
+  const ingredients = realisticSets[selectedCategory];
+  
+  const count = Math.floor(Math.random() * 3) + 3;
+  const shuffled = [...ingredients].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
 };
