@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import './App.css';
-// src/App.js
+import { recipes, mockImageRecognition } from './data/recipes';
 
 function App() {
   const [ingredients, setIngredients] = useState('');
@@ -29,9 +29,11 @@ function App() {
     'basil', 'oregano', 'lemon', 'lime', 'bell pepper', 'mushroom'
   ];
 
-  const API_BASE = process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5000';
+  // Local data - no API needed
+  const [userRatings, setUserRatings] = useState({});
+  const [userFavorites, setUserFavorites] = useState([]);
 
-  const handleSearch = async () => {
+  const handleSearch = () => {
     setError('');
     setRecipes([]);
 
@@ -41,118 +43,102 @@ function App() {
     }
     setLoading(true);
 
-    try {
-      const params = new URLSearchParams({
-        ingredients: ingredients.trim(),
-        ...Object.fromEntries(Object.entries(filters).filter(([_, v]) => v))
-      });
+    setTimeout(() => {
+      const availableIngredients = ingredients.toLowerCase().split(',').map(i => i.trim());
       
-      const response = await fetch(`${API_BASE}/api/recipes?${params}`);
-      
-      if (!response.ok) {
-        throw new Error('Server error. Please try again.');
+      let filteredRecipes = recipes.map(recipe => {
+        let matchCount = 0;
+        const missingIngredients = [];
+        
+        recipe.ingredients.forEach(ingredient => {
+          if (availableIngredients.some(userIng => 
+            ingredient.toLowerCase().includes(userIng) || userIng.includes(ingredient.toLowerCase())
+          )) {
+            matchCount++;
+          } else {
+            missingIngredients.push(ingredient);
+          }
+        });
+
+        const score = (matchCount / recipe.ingredients.length) * 100;
+        return { ...recipe, matchScore: score, missingIngredients };
+      }).filter(recipe => recipe.matchScore > 0);
+
+      // Apply filters
+      if (filters.dietary) {
+        filteredRecipes = filteredRecipes.filter(recipe => 
+          recipe.dietary.some(d => d.toLowerCase().includes(filters.dietary.toLowerCase()))
+        );
       }
+
+      if (filters.difficulty) {
+        filteredRecipes = filteredRecipes.filter(recipe => 
+          recipe.difficulty.toLowerCase() === filters.difficulty.toLowerCase()
+        );
+      }
+
+      if (filters.maxTime) {
+        filteredRecipes = filteredRecipes.filter(recipe => 
+          recipe.cookingTime <= parseInt(filters.maxTime)
+        );
+      }
+
+      if (filters.cuisine) {
+        filteredRecipes = filteredRecipes.filter(recipe => 
+          recipe.cuisine.toLowerCase().includes(filters.cuisine.toLowerCase())
+        );
+      }
+
+      filteredRecipes.sort((a, b) => b.matchScore - a.matchScore);
       
-      const data = await response.json();
-      
-      if (data.length === 0) {
+      if (filteredRecipes.length === 0) {
         setError('No recipes found. Try different ingredients or filters.');
       }
       
-      setRecipes(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
+      setRecipes(filteredRecipes);
       setLoading(false);
-    }
+    }, 500);
   };
 
-  const handleImageUpload = async (event) => {
+  const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
     setImageProcessing(true);
-    setError('');
+    setError('📸 Analyzing your image... This may take a moment.');
 
-    try {
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        const imageData = e.target.result;
-        
-        // Show immediate feedback
-        setError('📸 Analyzing your image... This may take a moment.');
-        
-        const response = await fetch(`${API_BASE}/api/recognize-ingredients`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ imageData })
-        });
-
-        if (!response.ok) throw new Error('Image processing failed.');
-        
-        const data = await response.json();
-        
-        // Merge with existing ingredients
-        const current = ingredients.split(',').map(i => i.trim()).filter(i => i);
-        const detected = data.ingredients.filter(ing => !current.includes(ing));
-        const combined = [...current, ...detected];
-        
-        setIngredients(combined.join(', '));
-        setError(`✅ Found ${detected.length} new ingredients: ${detected.join(', ')}`);
-        
-        // Clear success message after 3 seconds
-        setTimeout(() => setError(''), 3000);
-        
-        setImageProcessing(false);
-      };
-      reader.readAsDataURL(file);
-    } catch (err) {
-      setError(`❌ ${err.message}`);
+    setTimeout(() => {
+      const detected = mockImageRecognition();
+      const current = ingredients.split(',').map(i => i.trim()).filter(i => i);
+      const newIngredients = detected.filter(ing => !current.includes(ing));
+      const combined = [...current, ...newIngredients];
+      
+      setIngredients(combined.join(', '));
+      setError(`✅ Found ${newIngredients.length} new ingredients: ${newIngredients.join(', ')}`);
+      
+      setTimeout(() => setError(''), 3000);
       setImageProcessing(false);
-    }
+    }, 2000);
   };
 
-  const viewRecipe = async (recipeId) => {
-    try {
-      const response = await fetch(`${API_BASE}/api/recipes/${recipeId}`);
-      const recipe = await response.json();
+  const viewRecipe = (recipeId) => {
+    const recipe = recipes.find(r => r.id === recipeId);
+    if (recipe) {
       setSelectedRecipe(recipe);
       setServings(recipe.servings);
-    } catch (err) {
-      setError('Failed to load recipe details.');
     }
   };
 
-  const toggleFavorite = async (recipeId) => {
-    try {
-      const response = await fetch(`${API_BASE}/api/recipes/${recipeId}/favorite`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: 'default' })
-      });
-      
-      const data = await response.json();
-      
-      if (data.isFavorite) {
-        setFavorites([...favorites, recipeId]);
-      } else {
-        setFavorites(favorites.filter(id => id !== recipeId));
-      }
-    } catch (err) {
-      setError('Failed to update favorite.');
+  const toggleFavorite = (recipeId) => {
+    if (userFavorites.includes(recipeId)) {
+      setUserFavorites(userFavorites.filter(id => id !== recipeId));
+    } else {
+      setUserFavorites([...userFavorites, recipeId]);
     }
   };
 
-  const rateRecipe = async (recipeId, rating) => {
-    try {
-      await fetch(`${API_BASE}/api/recipes/${recipeId}/rate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ rating, userId: 'default' })
-      });
-    } catch (err) {
-      setError('Failed to save rating.');
-    }
+  const rateRecipe = (recipeId, rating) => {
+    setUserRatings({ ...userRatings, [recipeId]: rating });
   };
 
   const adjustServings = (recipe, newServings) => {
@@ -169,25 +155,15 @@ function App() {
     };
   };
 
-  const loadFavorites = async () => {
-    try {
-      const response = await fetch(`${API_BASE}/api/favorites?userId=default`);
-      const data = await response.json();
-      setRecipes(data);
-    } catch (err) {
-      setError('Failed to load favorites.');
-    }
+  const loadFavorites = () => {
+    const favoriteRecipes = recipes.filter(r => userFavorites.includes(r.id));
+    setRecipes(favoriteRecipes);
   };
 
-  const loadRecommendations = async () => {
-    try {
-      const response = await fetch(`${API_BASE}/api/recommendations?userId=default`);
-      const data = await response.json();
-      setRecommendations(data);
-      setRecipes(data);
-    } catch (err) {
-      setError('Failed to load recommendations.');
-    }
+  const loadRecommendations = () => {
+    const recommended = recipes.slice(0, 3);
+    setRecommendations(recommended);
+    setRecipes(recommended);
   };
 
   const addIngredient = (ingredient) => {
@@ -273,10 +249,10 @@ function App() {
           
           <div className="recipe-actions">
             <button 
-              className={`favorite-btn ${favorites.includes(selectedRecipe.id) ? 'favorited' : ''}`}
+              className={`favorite-btn ${userFavorites.includes(selectedRecipe.id) ? 'favorited' : ''}`}
               onClick={() => toggleFavorite(selectedRecipe.id)}
             >
-              {favorites.includes(selectedRecipe.id) ? '❤️' : '🤍'} Favorite
+              {userFavorites.includes(selectedRecipe.id) ? '❤️' : '🤍'} Favorite
             </button>
             
             <div className="rating">
@@ -491,10 +467,10 @@ function App() {
               <div className="recipe-header">
                 <h3>{recipe.name}</h3>
                 <button 
-                  className={`favorite-btn ${favorites.includes(recipe.id) ? 'favorited' : ''}`}
+                  className={`favorite-btn ${userFavorites.includes(recipe.id) ? 'favorited' : ''}`}
                   onClick={() => toggleFavorite(recipe.id)}
                 >
-                  {favorites.includes(recipe.id) ? '❤️' : '🤍'}
+                  {userFavorites.includes(recipe.id) ? '❤️' : '🤍'}
                 </button>
               </div>
               
