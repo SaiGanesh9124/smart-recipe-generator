@@ -1,6 +1,6 @@
 # 🍳 Smart Recipe Generator
 
-A modern web application that suggests recipes based on available ingredients, featuring image recognition, dietary filters, and user feedback systems.
+A modern React web application that suggests recipes based on available ingredients, featuring image recognition, dietary filters, and user feedback systems.
 
 ## ✨ Features
 
@@ -9,7 +9,7 @@ A modern web application that suggests recipes based on available ingredients, f
 - **Recipe Matching**: Advanced algorithm matching recipes to available ingredients
 - **Dietary Filters**: Vegetarian, vegan, gluten-free options
 - **Smart Filtering**: Filter by difficulty, cooking time, and cuisine
-- **Recipe Database**: 20+ diverse recipes from various cuisines
+- **Recipe Database**: 5 diverse recipes from various cuisines
 
 ### User Experience
 - **Mobile Responsive**: Optimized for all device sizes
@@ -26,6 +26,7 @@ A modern web application that suggests recipes based on available ingredients, f
 - **Loading States**: Smooth user experience with loading indicators
 - **Match Scoring**: Percentage-based ingredient matching
 - **Missing Ingredients**: Clear indication of what's needed
+- **Frontend-Only**: No backend required - all data stored locally
 
 ## 🚀 Quick Start
 
@@ -37,51 +38,32 @@ A modern web application that suggests recipes based on available ingredients, f
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/SaiGanesh9124/smart-recipe-generator.git
    cd smart-recipe-generator
    ```
 
-2. **Install backend dependencies**
-   ```bash
-   cd backend
-   npm install
-   ```
-
-3. **Install frontend dependencies**
-   ```bash
-   cd ../frontend
-   npm install
-   ```
-
-4. **Start the backend server**
-   ```bash
-   cd ../backend
-   npm run dev
-   ```
-
-5. **Start the frontend (in a new terminal)**
+2. **Install dependencies**
    ```bash
    cd frontend
+   npm install
+   ```
+
+3. **Start the application**
+   ```bash
    npm start
    ```
 
-6. **Open your browser**
+4. **Open your browser**
    Navigate to `http://localhost:3000`
 
 ## 🏗️ Architecture
 
-### Backend (Node.js/Express)
-- **Recipe API**: RESTful endpoints for recipe operations
-- **Filtering Engine**: Advanced recipe matching algorithm
-- **Image Processing**: Mock ingredient recognition endpoint
-- **User Management**: Ratings and favorites system
-- **Error Handling**: Comprehensive error management
-
-### Frontend (React)
-- **Component-Based**: Modular React components
+### Frontend-Only Design
+- **React Application**: Single-page application built with React
+- **Local Data Storage**: All recipes stored in local JavaScript files
+- **Mock Services**: Image recognition and user data handled locally
 - **State Management**: React hooks for state management
 - **Responsive Design**: Mobile-first CSS approach
-- **User Interface**: Modern, intuitive design
 
 ### Key Algorithms
 
@@ -103,24 +85,6 @@ validRecipes.sort((a, b) => b.matchScore - a.matchScore);
 - Common ingredient mappings
 - Substitution suggestions based on recipe database
 
-## 📱 API Endpoints
-
-### Recipe Operations
-- `GET /api/recipes` - Search recipes with filters
-- `GET /api/recipes/:id` - Get recipe details
-- `POST /api/recipes/:id/rate` - Rate a recipe
-- `POST /api/recipes/:id/favorite` - Toggle favorite status
-
-### User Features
-- `GET /api/favorites` - Get user's favorite recipes
-- `GET /api/substitutions/:ingredient` - Get substitution suggestions
-
-### Image Processing
-- `POST /api/recognize-ingredients` - Process uploaded images
-
-### Health Check
-- `GET /health` - Server health status
-
 ## 🎨 UI/UX Design
 
 ### Design Principles
@@ -140,42 +104,20 @@ validRecipes.sort((a, b) => b.matchScore - a.matchScore);
 - Hierarchical sizing for clear information structure
 - Readable line heights and spacing
 
-## 🔧 Configuration
-
-### Environment Variables
-Create a `.env` file in the backend directory:
-```env
-PORT=5000
-NODE_ENV=development
-```
-
-### Frontend Configuration
-Update API base URL in `App.js` for production:
-```javascript
-const API_BASE = process.env.NODE_ENV === 'production' 
-  ? 'https://your-backend-url.herokuapp.com' 
-  : 'http://localhost:5000';
-```
-
 ## 🚀 Deployment
 
-### Backend (Heroku)
-1. Create a Heroku app
-2. Connect your GitHub repository
-3. Set environment variables in Heroku dashboard
-4. Deploy from main branch
-
-### Frontend (Netlify)
+### Netlify (Recommended)
 1. Connect your GitHub repository to Netlify
-2. Set build command: `npm run build`
-3. Set publish directory: `build`
-4. Update API URL in netlify.toml
-5. Deploy
+2. Build settings:
+   - Base directory: `frontend`
+   - Build command: `npm run build`
+   - Publish directory: `build`
+3. Deploy automatically
 
 ### Alternative Deployment Options
-- **Vercel**: For both frontend and serverless backend
-- **Railway**: For backend deployment
-- **GitHub Pages**: For frontend (static hosting)
+- **Vercel**: Connect GitHub repository for automatic deployment
+- **GitHub Pages**: For static hosting
+- **Surge.sh**: Simple static hosting
 
 ## 🧪 Testing
 
@@ -191,42 +133,32 @@ const API_BASE = process.env.NODE_ENV === 'production'
 ### Test Scenarios
 1. **Empty ingredient search** - Should show error message
 2. **No matching recipes** - Should display appropriate message
-3. **Server offline** - Should handle connection errors gracefully
-4. **Image upload** - Should process and populate ingredients
-5. **Filter combinations** - Should work with multiple filters
+3. **Image upload** - Should process and populate ingredients
+4. **Filter combinations** - Should work with multiple filters
+5. **Multiple ingredient selection** - Should allow selecting multiple ingredients
 
 ## 🔍 Error Handling
 
 ### Frontend Error Handling
-- Network connectivity issues
-- Invalid server responses
-- Image processing failures
 - User input validation
-
-### Backend Error Handling
-- Invalid request parameters
-- Database connection issues
-- File processing errors
-- Rate limiting and security
+- Image processing failures
+- Empty search results
+- Filter validation
 
 ## 📊 Performance Considerations
 
 ### Frontend Optimizations
 - Component memoization for expensive operations
-- Lazy loading for recipe details
+- Efficient state management with React hooks
 - Image optimization and compression
-- Efficient state management
-
-### Backend Optimizations
-- In-memory caching for recipe data
-- Request validation and sanitization
-- Efficient filtering algorithms
-- Response compression
+- Local data storage for fast access
+- Responsive design for all devices
 
 ## 🔮 Future Enhancements
 
 ### Planned Features
 - **Real Image Recognition**: Integration with Clarifai or Google Vision API
+- **More Recipes**: Expand recipe database to 20+ recipes
 - **User Accounts**: Personal recipe collections and history
 - **Shopping Lists**: Generate shopping lists from recipes
 - **Meal Planning**: Weekly meal planning functionality
@@ -235,9 +167,9 @@ const API_BASE = process.env.NODE_ENV === 'production'
 - **Recipe Creation**: User-generated recipe submissions
 
 ### Technical Improvements
-- **Database Integration**: PostgreSQL or MongoDB for data persistence
-- **Authentication**: JWT-based user authentication
-- **Caching**: Redis for improved performance
+- **Backend Integration**: Add Node.js/Express backend for data persistence
+- **Database Integration**: PostgreSQL or MongoDB for recipe storage
+- **Authentication**: User login and personal data
 - **Testing**: Comprehensive unit and integration tests
 - **CI/CD**: Automated testing and deployment pipeline
 
